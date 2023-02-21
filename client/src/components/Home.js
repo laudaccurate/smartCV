@@ -32,6 +32,7 @@ const Home = () => {
         onSubmit={handleFormSubmit}
         method="POST"
         encType="multipart/form-data"
+        className="p-8 w-[70%] flex flex-col shadow-md shadow-slate-500 h-[60%]"
       >
         <label htmlFor="fullName">Enter your full name</label>
         <input
@@ -42,14 +43,14 @@ const Home = () => {
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
         />
-        <div className="nestedContainer">
+        <div className="flex items-center justify-between w-full">
           <div>
             <label htmlFor="currentPosition">Current Position</label>
             <input
               type="text"
               required
               name="currentPosition"
-              className="currentInput"
+              className="min"
               value={currentPosition}
               onChange={(e) => setCurrentPosition(e.target.value)}
             />
@@ -60,7 +61,7 @@ const Home = () => {
               type="number"
               required
               name="currentLength"
-              className="currentInput"
+              className=""
               value={currentLength}
               onChange={(e) => setCurrentLength(e.target.value)}
             />
@@ -71,7 +72,7 @@ const Home = () => {
               type="text"
               required
               name="currentTechnologies"
-              className="currentInput"
+              className=""
               value={currentTechnologies}
               onChange={(e) => setCurrentTechnologies(e.target.value)}
             />
