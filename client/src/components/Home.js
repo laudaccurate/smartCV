@@ -1,18 +1,35 @@
+import {
+  MultiSelect,
+  NumberInput,
+  SegmentedControl,
+  Text,
+  FileInput,
+  TextInput,
+  Button,
+} from "@mantine/core";
+import { IconUpload } from "@tabler/icons";
+
 import React, { useState } from "react";
 import Loading from "./Loading";
 
 const Home = () => {
-  const [fullName, setFullName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [currentPosition, setCurrentPosition] = useState("");
   const [currentLength, setCurrentLength] = useState(1);
   const [currentTechnologies, setCurrentTechnologies] = useState("");
   const [headshot, setHeadshot] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [data, setData] = useState([
+    { value: "react", label: "React" },
+    { value: "ng", label: "Angular" },
+  ]);
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
     console.log({
-      fullName,
+      firstName,
+      lastName,
       currentPosition,
       currentLength,
       currentTechnologies,
@@ -34,61 +51,93 @@ const Home = () => {
         encType="multipart/form-data"
         className="p-8 w-[70%] flex flex-col shadow-md shadow-slate-500 h-[60%]"
       >
-        <label htmlFor="fullName">Enter your full name</label>
-        <input
-          type="text"
-          required
-          name="fullName"
-          id="fullName"
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
-        />
-        <div className="flex items-center justify-between w-full">
-          <div>
-            <label htmlFor="currentPosition">Current Position</label>
-            <input
-              type="text"
-              required
-              name="currentPosition"
-              className="min"
-              value={currentPosition}
-              onChange={(e) => setCurrentPosition(e.target.value)}
-            />
-          </div>
-          <div>
-            <label htmlFor="currentLength">For how long? (year)</label>
-            <input
-              type="number"
-              required
-              name="currentLength"
-              className=""
-              value={currentLength}
-              onChange={(e) => setCurrentLength(e.target.value)}
-            />
-          </div>
-          <div>
-            <label htmlFor="currentTechnologies">Technologies used</label>
-            <input
-              type="text"
-              required
-              name="currentTechnologies"
-              className=""
-              value={currentTechnologies}
-              onChange={(e) => setCurrentTechnologies(e.target.value)}
-            />
-          </div>
+        <div className=" grid grid-cols-2 space-x-6 items-center justify-between w-full">
+          <TextInput
+            label="Enter your first name"
+            placeholder="First Name"
+            withAsterisk
+            size="md"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+          />
+          <TextInput
+            label="Enter your last name"
+            placeholder="Last Name"
+            withAsterisk
+            size="md"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+          />
         </div>
-        <label htmlFor="photo">Upload your headshot image</label>
-        <input
-          type="file"
-          name="photo"
-          required
-          id="photo"
-          accept="image/x-png,image/jpeg"
-          onChange={(e) => setHeadshot(e.target.files[0])}
-        />
+        <div className="grid grid-cols-2 space-x-6 items-center justify-between w-full">
+          <div className="flex flex-col justify-start mb-[11px]">
+            <Text className="text-base font-[450] font-serif">
+              Experience Level
+            </Text>
+            <SegmentedControl
+              label="Experience Level"
+              size="md"
+              fullWidth
+              data={["Junior", "Mid-level", "Senior", "Expert"]}
+            />
+          </div>
 
-        <button>CREATE RESUME</button>
+          <NumberInput
+            defaultValue={1}
+            label="For how long? (year)"
+            placeholder="Years of experience"
+            withAsterisk
+            size="md"
+            value={currentLength}
+            onChange={(val) => setCurrentLength(val)}
+          />
+        </div>
+        <div className="grid grid-cols-2 space-x-6">
+          <TextInput
+            label="Current Position"
+            placeholder="Position"
+            withAsterisk
+            size="md"
+            value={currentPosition}
+            onChange={(e) => setCurrentPosition(e.target.value)}
+          />
+        </div>
+        <div className="grid grid-cols-2 justify-between space-x-6 mb-10">
+          <MultiSelect
+            data={data}
+            label="Technologies used"
+            size="md"
+            placeholder="Pick all that you used"
+            nothingFound="Nothing found"
+            searchable
+            creatable
+            getCreateLabel={(query) => `+ Create ${query}`}
+            onCreate={(query) => {
+              const item = { value: query, label: query };
+              setData((current) => [...current, item]);
+              return item;
+            }}
+            value={currentTechnologies}
+            onChange={setCurrentTechnologies}
+          />
+
+          <FileInput
+            label="Upload your headshot image"
+            placeholder="Headshot image"
+            withAsterisk
+            accept="image/x-png,image/jpeg"
+            icon={<IconUpload size={14} />}
+            onChange={(e) => setHeadshot(e.target.files[0])}
+            size="md"
+            // className="mt-[2px]"
+          />
+        </div>
+
+        <div className="flex justify-center">
+          <Button className="w-[25%] " size="md">
+            Create Resume
+          </Button>
+        </div>
       </form>
     </div>
   );

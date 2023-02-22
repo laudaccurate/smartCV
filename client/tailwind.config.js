@@ -7,6 +7,9 @@ module.exports = {
   },
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
+    fontFamily: {
+      serif: ["Space Grotesk"],
+    },
     extend: {
       animation: {
         "ping-slow": "ping 3s linear infinite",

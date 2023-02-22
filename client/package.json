@@ -5,7 +5,9 @@
   "dependencies": {
     "@emotion/react": "^11.10.6",
     "@mantine/core": "^5.10.4",
+    "@mantine/dropzone": "^5.10.4",
     "@mantine/hooks": "^5.10.4",
+    "@tabler/icons": "^1.115.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
