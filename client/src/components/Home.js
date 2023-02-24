@@ -7,37 +7,74 @@ import {
   TextInput,
   Button,
 } from "@mantine/core";
-import { IconUpload } from "@tabler/icons";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { IconTextPlus, IconTrash, IconUpload } from "@tabler/icons";
 
 import React, { useState } from "react";
 import Loading from "./Loading";
 
 const Home = () => {
+  const navigate = useNavigate();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [currentPosition, setCurrentPosition] = useState("");
   const [currentLength, setCurrentLength] = useState(1);
   const [currentTechnologies, setCurrentTechnologies] = useState("");
+  const [companyInfo, setCompanyInfo] = useState([{ name: "", position: "" }]);
   const [headshot, setHeadshot] = useState(null);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([
     { value: "react", label: "React" },
     { value: "ng", label: "Angular" },
+    { value: "fl", label: "Flutter" },
+    { value: "js", label: "JavaScript" },
+    { value: "tw", label: "Tailwind" },
   ]);
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    console.log({
-      firstName,
-      lastName,
-      currentPosition,
-      currentLength,
-      currentTechnologies,
-      headshot,
-    });
     setLoading(true);
+
+    const formData = new FormData();
+    formData.append("headshotImage", headshot, headshot.name);
+    formData.append("firstName", firstName);
+    formData.append("lastName", lastName);
+    formData.append("currentPosition", currentPosition);
+    formData.append("currentLength", currentLength);
+    formData.append("currentTechnologies", currentTechnologies);
+    formData.append("workHistory", JSON.stringify(companyInfo));
+    axios
+      .post("http://localhost:4000/resume/create", formData, {})
+      .then((res) => {
+        if (res.data.message) {
+          console.log(res.data.data);
+          navigate("/resume");
+          setLoading(false);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
   };
-  //👇🏻 Renders the Loading component you submit the form
+
+  const handleAddCompany = () =>
+    setCompanyInfo([...companyInfo, { name: "", position: "" }]);
+
+  const handleRemoveCompany = (index) => {
+    const list = [...companyInfo];
+    list.splice(index, 1);
+    setCompanyInfo(list);
+  };
+
+  const handleUpdateCompany = (e, index) => {
+    const { name, value } = e.target;
+    const list = [...companyInfo];
+    list[index][name] = value;
+    setCompanyInfo(list);
+  };
+
   if (loading) {
     return <Loading />;
   }
@@ -132,9 +169,58 @@ const Home = () => {
             // className="mt-[2px]"
           />
         </div>
+        <div className="mb-10">
+          <h3>Companies you've worked at</h3>
+          {companyInfo.map((company, index) => (
+            <div
+              className="flex items-center justify-between w-full"
+              key={index}
+            >
+              <div className="companies">
+                <TextInput
+                  label="Company Name"
+                  placeholder="Company Name"
+                  size="md"
+                  onChange={(e) => handleUpdateCompany(e, index)}
+                />
+              </div>
+              <div className="companies">
+                <TextInput
+                  label="Position Held"
+                  placeholder="Position"
+                  size="md"
+                  onChange={(e) => handleUpdateCompany(e, index)}
+                />
+              </div>
 
+              <div className="btn__group">
+                <IconTrash
+                  size={40}
+                  onClick={() => handleRemoveCompany(index)}
+                  className={`${
+                    !(companyInfo.length > 1) ? "opacity-0" : "cursor-pointer"
+                  } text-red-600 px-2 text-base`}
+                />
+                <IconTextPlus
+                  size={40}
+                  onClick={handleAddCompany}
+                  className={`${
+                    !(companyInfo.length - 1 === index && companyInfo.length)
+                      ? "opacity-0"
+                      : "cursor-pointer"
+                  } text-green-600 px-2 `}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
         <div className="flex justify-center">
-          <Button className="w-[25%] " size="md">
+          <Button
+            className="w-[25%] "
+            size="md"
+            type="submit"
+            // onClick={(e) => handleFormSubmit(e)}
+          >
             Create Resume
           </Button>
         </div>
