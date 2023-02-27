@@ -14,7 +14,7 @@ import { IconTextPlus, IconTrash, IconUpload } from "@tabler/icons";
 import React, { useState } from "react";
 import Loading from "./Loading";
 
-const Home = () => {
+const Home = ({ setResumeData }) => {
   const navigate = useNavigate();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -51,6 +51,7 @@ const Home = () => {
       .then((res) => {
         if (res.data.message) {
           console.log(res.data.data);
+          setResumeData(res.data.data);
           navigate("/resume");
           setLoading(false);
         }
@@ -72,10 +73,8 @@ const Home = () => {
 
   const handleUpdateCompany = (e, index) => {
     const { name, value } = e.target;
-    console.log(e.target.name, " === ", e.target.value);
     const list = [...companyInfo];
     list[index][name] = value;
-    console.log(list[index]);
     setCompanyInfo(list);
   };
 

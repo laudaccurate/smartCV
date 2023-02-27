@@ -8,7 +8,7 @@ module.exports = (app, upload) => {
     upload.single("headshotImage"),
     async (req, res) => {
       const {
-        firtsName,
+        firstName,
         lastName,
         currentPosition,
         currentLength,
@@ -23,7 +23,7 @@ module.exports = (app, upload) => {
         id:
           new Date().getTime().toString(36) +
           Math.random().toString(36).slice(2),
-        firtsName,
+        firstName,
         lastName,
         image_url: `http://localhost:4000/uploads/${req.file.filename}`,
         currentPosition,
@@ -36,21 +36,21 @@ module.exports = (app, upload) => {
       const remainderText = () => {
         let stringText = "";
         for (let i = 0; i < workArray.length; i++) {
-          stringText += ` ${workArray[i].name} as a ${workArray[i].position}.`;
+          stringText += ` ${workArray[i].company} as a ${workArray[i].position}.`;
         }
         return stringText;
       };
       //👇🏻 The job description prompt
       const prompt1 = `I am writing a resume, my details are \n name: ${
-        firtsName + " " + lastName
+        firstName + " " + lastName
       } \n role: ${currentPosition} (${currentLength} years). \n I write in the technolegies: ${currentTechnologies}. Can you write a 100 words description for the top of the resume(first person writing)?`;
       //👇🏻 The job responsibilities prompt
       const prompt2 = `I am writing a resume, my details are \n name: ${
-        firtsName + " " + lastName
+        firstName + " " + lastName
       } \n role: ${currentPosition} (${currentLength} years). \n I write in the technolegies: ${currentTechnologies}. Can you write 10 points for a resume on what I am good at?`;
       //👇🏻 The job achievements prompt
       const prompt3 = `I am writing a resume, my details are \n name: ${
-        firtsName + " " + lastName
+        firstName + " " + lastName
       } \n role: ${currentPosition} (${currentLength} years). \n During my years I worked at ${
         workArray.length
       } companies. ${remainderText()} \n Can you write me 50 words for each company seperated in numbers of my succession in the company (in first person)?`;
