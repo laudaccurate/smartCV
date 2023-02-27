@@ -21,15 +21,17 @@ const Home = () => {
   const [currentPosition, setCurrentPosition] = useState("");
   const [currentLength, setCurrentLength] = useState(1);
   const [currentTechnologies, setCurrentTechnologies] = useState("");
-  const [companyInfo, setCompanyInfo] = useState([{ name: "", position: "" }]);
+  const [companyInfo, setCompanyInfo] = useState([
+    { company: "", position: "" },
+  ]);
   const [headshot, setHeadshot] = useState(null);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([
-    { value: "react", label: "React" },
-    { value: "ng", label: "Angular" },
-    { value: "fl", label: "Flutter" },
-    { value: "js", label: "JavaScript" },
-    { value: "tw", label: "Tailwind" },
+    { value: "React", label: "React" },
+    { value: "Angular", label: "Angular" },
+    { value: "Flutter", label: "Flutter" },
+    { value: "JavaScript", label: "JavaScript" },
+    { value: "Tailwind", label: "Tailwind" },
   ]);
 
   const handleFormSubmit = (e) => {
@@ -60,7 +62,7 @@ const Home = () => {
   };
 
   const handleAddCompany = () =>
-    setCompanyInfo([...companyInfo, { name: "", position: "" }]);
+    setCompanyInfo([...companyInfo, { company: "", position: "" }]);
 
   const handleRemoveCompany = (index) => {
     const list = [...companyInfo];
@@ -70,8 +72,10 @@ const Home = () => {
 
   const handleUpdateCompany = (e, index) => {
     const { name, value } = e.target;
+    console.log(e.target.name, " === ", e.target.value);
     const list = [...companyInfo];
     list[index][name] = value;
+    console.log(list[index]);
     setCompanyInfo(list);
   };
 
@@ -164,7 +168,7 @@ const Home = () => {
             withAsterisk
             accept="image/x-png,image/jpeg"
             icon={<IconUpload size={14} />}
-            onChange={(e) => setHeadshot(e.target.files[0])}
+            onChange={setHeadshot}
             size="md"
             // className="mt-[2px]"
           />
@@ -180,6 +184,7 @@ const Home = () => {
                 <TextInput
                   label="Company Name"
                   placeholder="Company Name"
+                  name="company"
                   size="md"
                   onChange={(e) => handleUpdateCompany(e, index)}
                 />
@@ -187,6 +192,7 @@ const Home = () => {
               <div className="companies">
                 <TextInput
                   label="Position Held"
+                  name="position"
                   placeholder="Position"
                   size="md"
                   onChange={(e) => handleUpdateCompany(e, index)}
