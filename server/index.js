@@ -3,6 +3,7 @@ const cors = require("cors");
 const multer = require("multer");
 const path = require("path");
 const app = express();
+require("./openAI.config");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
